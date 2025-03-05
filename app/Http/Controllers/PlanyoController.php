@@ -7,6 +7,7 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 use App\Http\Controllers\PaymentProcessor;
 use App\Models\Reservation;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class PlanyoController extends BaseController {
   public function webHook(Request $request) {
@@ -14,12 +15,14 @@ class PlanyoController extends BaseController {
       'reservation_id' => $request->reservation,
       'status' => $request->status,
       'payment_confirming_reservation' => $request->payment_confirming_reservation,
+      'created_at' => Carbon::createFromTimestamp($request->creation_date)
     ];
 
     $validator = Validator::make($data, [
       'reservation_id' => 'required|integer',
       'status' => 'required|integer',
       'payment_confirming_reservation' => 'integer',
+      'creation_date' => 'required',
     ]);
 
     if ($validator->fails()) {

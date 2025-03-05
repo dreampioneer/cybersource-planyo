@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Log;
 class PlanyoController extends BaseController {
   public function webHook(Request $request) {
     $data = [
-      'reservation_id' => $request->reservation,
-      'status' => $request->status,
-      'payment_confirming_reservation' => $request->payment_confirming_reservation,
+      'reservation_id' => intval($request->reservation),
+      'status' => intval($request->status),
+      'payment_confirming_reservation' => intval($request->payment_confirming_reservation),
       'created_at' => Carbon::createFromTimestamp($request->creation_date)
     ];
 

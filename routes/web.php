@@ -20,3 +20,4 @@ $router->get('/', function () use ($router) {
 
 $router->get('/checkout', 'CheckOutController@checkOut');
 $router->post('/checkout/checkout_process', 'CheckOutController@checkOutProcess');
+$router->post('/planyo/webhook','PlanyoController@webHook');

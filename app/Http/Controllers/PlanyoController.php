@@ -22,7 +22,7 @@ class PlanyoController extends BaseController {
       'reservation_id' => 'required|integer',
       'status' => 'required|integer',
       'payment_confirming_reservation' => 'integer',
-      'creation_date' => 'required',
+      'created_at' => 'required',
     ]);
 
     if ($validator->fails()) {

@@ -32,7 +32,7 @@ class PlanyoController extends BaseController {
       return response()->json(['errors' => $validator->errors()], 400);
     }
     $exist = Reservation::where('reservation_id', $data['reservation_id'])->count();
-    if($exist) {
+    if(!$exist) {
       $reservation = Reservation::create($data);
     } else {
       $reservation = Reservation::where('reservation_id', $data['reservation_id'])->update($data);

@@ -8,6 +8,7 @@ use App\Http\Controllers\PaymentProcessor;
 use App\Models\Reservation;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class PlanyoController extends BaseController {
   public function webHook(Request $request) {
@@ -27,6 +28,7 @@ class PlanyoController extends BaseController {
 
     if ($validator->fails()) {
       // Handle validation failure (e.g., return errors)
+      Log::error(json_encode($validator->errors()));
       return response()->json(['errors' => $validator->errors()], 400);
     }
 

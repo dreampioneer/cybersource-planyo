@@ -31,9 +31,12 @@ class PlanyoController extends BaseController {
       Log::error(json_encode($validator->errors()));
       return response()->json(['errors' => $validator->errors()], 400);
     }
-
-    // If validation passes, create the new reservation
-    $reservation = Reservation::create($data);
+    $exist = Reservation::where('reservation_id', $data['reservation_id'])->count();
+    if($exist) {
+      $reservation = Reservation::create($data);
+    } else {
+      $reservation = Reservation::where('reservation_id', $data['reservation_id'])->update($data);
+    }
 
     return response()->json(['reservation' => $reservation], 201);
   }

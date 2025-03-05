@@ -18,6 +18,7 @@ $router->get('/', function () use ($router) {
 });
 
 
-$router->get('/checkout', 'CheckOutController@checkOut');
+$router->get('/checkout', ['as' => 'checkout', 'uses' => 'CheckOutController@checkOut']);
+$router->post('/checkout', 'CheckOutController@checkOutP');
 $router->post('/checkout/checkout_process', 'CheckOutController@checkOutProcess');
 $router->post('/planyo/webhook','PlanyoController@webHook');

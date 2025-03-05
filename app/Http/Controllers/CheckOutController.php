@@ -26,6 +26,20 @@ class CheckOutController extends BaseController
     }
   }
 
+  public function checkOutP(Request $request) {
+    $reservation_id = $request->query('reservation_id');
+    $cart_items = $request->query('cart_items');
+    $items_total = $request->query('items_total');
+
+    $queryParams = [
+        'reservation_id' => $reservation_id,
+        'cart_items' => $cart_items,
+        'items_total' => $items_total
+    ];
+
+    return redirect()->route('checkout', $queryParams);
+  }
+
   public function checkOutProcess(Request $request) {
     $cart_id = $request->cart_id;
     $card_number = $request->card_number;

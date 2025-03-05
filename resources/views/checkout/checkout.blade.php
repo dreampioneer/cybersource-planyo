@@ -86,6 +86,9 @@
 
     <script type="text/javascript" src="/assets/js/jquery-3.7.1.min.js"></script>
     <script type="text/javascript" src="/assets/js/toast-plugin-min.js"></script>
+    <script type="text/javascript">
+      const cartId = {!! $card_id !!};
+    </script>
     <script type="text/javascript" src="/assets/js/script.js"></script>
   </body>
 </html>

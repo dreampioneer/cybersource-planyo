@@ -27,7 +27,7 @@ class CheckOutController extends BaseController
             'reservation_id' => intval($item['reservation_id']),
             'status' => intval($item['status']),
             'payment_confirming_reservation' => isset($item['payment_confirming_reservation']) ? intval($item['payment_confirming_reservation']) : 0,
-            'created_at' => $item['creation_time'],
+            'creation_time' => $item['creation_time'],
         ];
         if(!$exist) {
           $reservation = new Reservation();

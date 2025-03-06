@@ -153,6 +153,7 @@ $(".card-number").on("keyup", function () {
 });
 
 $(".btn-pay").click(function () {
+    const flag = $(this).attr("data-flag");
     const cardNumber = $("input[name=card_number]").val();
     const cardHolder = $("input[name=card_holder]").val();
     const expiryDate = $("input[name=expiry_date]").val();
@@ -172,6 +173,7 @@ $(".btn-pay").click(function () {
         card_holder: cardHolder,
         expiry_date: expiryDate,
         cvc: cvc,
+        flag: flag,
     };
 
     $.ajax({

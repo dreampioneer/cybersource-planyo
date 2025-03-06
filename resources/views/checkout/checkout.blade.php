@@ -76,9 +76,15 @@
                       <label>CARD NUMBER</label>
                       <h4 class="c-number"></h4>
                   </div>
-                  <button class="btn-pay">
+                  <button class="btn-pay" data-flag="true">
                       COMPLETE ORDER
                   </button>
+                  <div style="width: 100%">
+                  <p>You can edit reservation with 24 hrs</p>
+                  <button class="btn-pay" data-flag="false">
+                      COMPLETE ORDER AFTER 24 HRS
+                  </button>
+                  </div>
               </div>
           </div>
       </div>

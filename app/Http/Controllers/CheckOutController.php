@@ -14,7 +14,7 @@ class CheckOutController extends BaseController
     $items_total = $request->query('items_total');
     $items_total = str_replace('$ ','', $items_total);
     $paymentProcessor = new PaymentProcessor();
-    $data = $paymentProcessor->getCartItems($cart_items); 
+    $data = $paymentProcessor->getCartItems($cart_items);
     if (isset($data['response_code']) && $data['response_code'] === 3) {
         echo "error";
         die();

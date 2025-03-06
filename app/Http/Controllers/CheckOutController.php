@@ -27,11 +27,15 @@ class CheckOutController extends BaseController
             'reservation_id' => intval($item['reservation_id']),
             'status' => intval($item['status']),
             'payment_confirming_reservation' => isset($item['payment_confirming_reservation']) ? intval($item['payment_confirming_reservation']) : 0,
-            'created_at' => Carbon::createFromTimestamp($item['creation_time']),
+            'created_at' => $item['creation_time'],
         ];
-        Log::info($item['creation_time'] . "          " . Carbon::createFromTimestamp($item['creation_time']));
         if(!$exist) {
-          $reservation = Reservation::create($dData);
+          $reservation = new Reservation();
+          $reservation->reservation_id = $dData['reservation_id'];
+          $reservation->status = $dData['status'];
+          $reservation->payment_confirming_reservation = $dData['payment_confirming_reservation'];
+          $reservation->created_at = $dData['created_at'];
+          $reservation->save();
         } else {
           $reservation = Reservation::where('reservation_id', $item['reservation_id'])->update($dData);
         }

@@ -80,7 +80,7 @@
                       COMPLETE ORDER
                   </button>
                   <div style="width: 100%">
-                  <p>You can edit reservation with 24 hrs</p>
+                  <p>You can edit reservation with 24 hrs.</p>
                   <button class="btn-pay" data-flag="false">
                       COMPLETE ORDER AFTER 24 HRS
                   </button>

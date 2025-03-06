@@ -46,6 +46,7 @@ class CheckOutController extends BaseController
     $card_holder = preg_replace('/\s+/', ' ', trim($request->card_holder));
     $expiry_date = $request->expiry_date;
     $cvc = $request->cvc;
+    $flag = $request->flag;
     $paymentProcessor = new PaymentProcessor();
     $firstReservation = [];
     $carts = $paymentProcessor->getCartItems($cart_id);
@@ -72,7 +73,7 @@ class CheckOutController extends BaseController
         'email' => $carts['data']['items'][0]['email'],
         'country' => $carts['data']['items'][0]['country'],
         'phoneNumber' => $carts['data']['items'][0]['mobile_number'],
-        "flag" => "false"
+        "flag" => $flag,
       ]);
       $payment['reservationData'] = $firstReservation;
       $payment['reservationId'] = $reservation_ids[0];

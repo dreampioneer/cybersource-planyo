@@ -16,6 +16,7 @@ use CyberSource\Model\Ptsv2paymentsProcessingInformation;
 use CyberSource\ApiClient;
 use CyberSource\ExternalConfiguration;
 use CyberSource\Api\PaymentsApi;
+use Illuminate\Support\Facades\Log;
 
 class PaymentProcessor
 {
@@ -96,7 +97,7 @@ class PaymentProcessor
         try {
             $apiResponse = $api_instance->createPayment($requestObj);
             $paymentStatus = $this->getPaymentStatus($apiResponse[0]->getStatus());
-
+            Log::info($paymentStatus);
             $result = $this->addReservationPayment([
                 'reservation_ids'=> $data['reservationIds'],
                 'payment_mode' => 40,

@@ -19,6 +19,20 @@ class CheckOutController extends BaseController
         echo "error";
         die();
     } else {
+      foreach($data['data']['items'] as $index => $item) {
+        $exist = Reservation::where('reservation_id', $item['reservation_id'])->count();
+        $dData = [
+            'reservation_id' => intval($item['reservation_id']),
+            'status' => intval($item['status']),
+            'payment_confirming_reservation' => intval($item['payment_confirming_reservation']),
+            'created_at' => $item['creation_time'],
+        ];
+        if(!$exist) {
+          $reservation = Reservation::create($dData);
+        } else {
+          $reservation = Reservation::where('reservation_id', $item['reservation_id'])->update($dData);
+        }
+      }
       $data['card_id'] = $cart_items;
       $data['items_total'] = $items_total;
       $data['data'] = $data;
@@ -59,18 +73,6 @@ class CheckOutController extends BaseController
         array_push($amounts, $reservation['data']['total_price'] ?? 0);
         if ($index === 0) {
             $firstReservation = $reservation['data'] ?? [];
-        }
-        $exist = Reservation::where('reservation_id', $item['reservation_id'])->count();
-        $data = [
-            'reservation_id' => intval($item['reservation_id']),
-            'status' => intval($item['status']),
-            'payment_confirming_reservation' => intval($item['payment_confirming_reservation']),
-            'created_at' => $item['creation_time'],
-        ];
-        if(!$exist) {
-          $reservation = Reservation::create($data);
-        } else {
-          $reservation = Reservation::where('reservation_id', $item['reservation_id'])->update($data);
         }
       }
       $payment = $paymentProcessor->makePayment([

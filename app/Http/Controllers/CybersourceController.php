@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 
 class CybersourceController extends BaseController {
   public function webHook(Request $request) {
-    Log::info(json_encode($request->all()));
+    Log::info("Cybersource Webhook" . json_encode($request->all()));
   }
 
   public function webHookHealthCheck(Request $request) {

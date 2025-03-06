@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('reservation_id')->unique();
             $table->integer('status');
             $table->integer('payment_confirming_reservation');
+            $table->integer('captured');
             $table->timestamps();
         });
     }

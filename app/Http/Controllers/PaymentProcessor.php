@@ -100,7 +100,10 @@ class PaymentProcessor
             $paymentStatus = $this->getPaymentStatus($apiResponse[0]->getStatus());
             Log::info($apiResponse[0]->getStatus());
             Log::info($paymentStatus);
-            Reservation::whereIn('reservation_id', $data['reservationIds'])->update(['payment_confirming_reservation' => $paymentStatus, 'captured' => $capture ? 1 : 0]);
+            Reservation::whereIn('reservation_id', $data['reservationIds'])->update([
+                'payment_confirming_reservation' => $paymentStatus, 'captured' => $capture ? 1 : 0,
+                'transaction_id' => $apiResponse[0]->getId()
+            ]);
             $result = $this->addReservationPayment([
                 'reservation_ids'=> $data['reservationIds'],
                 'payment_mode' => 40,
@@ -122,53 +125,52 @@ class PaymentProcessor
         }
     }
 
-    // public function capturePayment($data){
-    //     $id = SimpleAuthorizationInternet("false")[0]['id'];
+    public function capturePayment($data){
 
-    //     $clientReferenceInformationArr = [
-    //         "code" => "TC50171_3"
-    //     ];
-    //     $clientReferenceInformation = new CyberSource\Model\Ptsv2paymentsClientReferenceInformation($clientReferenceInformationArr);
+        $clientReferenceInformationArr = [
+            "code" => "TC50171_3"
+        ];
+        $clientReferenceInformation = new CyberSource\Model\Ptsv2paymentsClientReferenceInformation($clientReferenceInformationArr);
 
-    //     $orderInformationAmountDetailsArr = [
-    //             "totalAmount" => "102.21",
-    //             "currency" => "USD"
-    //     ];
-    //     $orderInformationAmountDetails = new CyberSource\Model\Ptsv2paymentsidcapturesOrderInformationAmountDetails($orderInformationAmountDetailsArr);
+        $orderInformationAmountDetailsArr = [
+                "totalAmount" => "102.21",
+                "currency" => "USD"
+        ];
+        $orderInformationAmountDetails = new CyberSource\Model\Ptsv2paymentsidcapturesOrderInformationAmountDetails($orderInformationAmountDetailsArr);
 
-    //     $orderInformationArr = [
-    //         "amountDetails" => $orderInformationAmountDetails
-    //     ];
-    //     $orderInformation = new CyberSource\Model\Ptsv2paymentsidcapturesOrderInformation($orderInformationArr);
+        $orderInformationArr = [
+            "amountDetails" => $orderInformationAmountDetails
+        ];
+        $orderInformation = new CyberSource\Model\Ptsv2paymentsidcapturesOrderInformation($orderInformationArr);
 
-    //     $requestObjArr = [
-    //             "clientReferenceInformation" => $clientReferenceInformation,
-    //             "orderInformation" => $orderInformation
-    //     ];
-    //     $requestObj = new CyberSource\Model\CapturePaymentRequest($requestObjArr);
+        $requestObjArr = [
+                "clientReferenceInformation" => $clientReferenceInformation,
+                "orderInformation" => $orderInformation
+        ];
+        $requestObj = new CyberSource\Model\CapturePaymentRequest($requestObjArr);
 
 
-    //     $commonElement = new CyberSource\ExternalConfiguration();
-    //     $config = $commonElement->ConnectionHost();
-    //     $merchantConfig = $commonElement->merchantConfigObject();
+        $commonElement = new CyberSource\ExternalConfiguration();
+        $config = $commonElement->ConnectionHost();
+        $merchantConfig = $commonElement->merchantConfigObject();
 
-    //     $api_client = new CyberSource\ApiClient($config, $merchantConfig);
-    //     $api_instance = new CyberSource\Api\CaptureApi($api_client);
+        $api_client = new CyberSource\ApiClient($config, $merchantConfig);
+        $api_instance = new CyberSource\Api\CaptureApi($api_client);
 
-    //     try {
-    //         $apiResponse = $api_instance->capturePayment($requestObj, $id);
-    //         print_r(PHP_EOL);
-    //         print_r($apiResponse);
+        try {
+            $apiResponse = $api_instance->capturePayment($requestObj, $id);
+            print_r(PHP_EOL);
+            print_r($apiResponse);
 
-    //         WriteLogAudit($apiResponse[1]);
-    //         return $apiResponse;
-    //     } catch (Cybersource\ApiException $e) {
-    //         print_r($e->getResponseBody());
-    //         print_r($e->getMessage());
-    //         $errorCode = $e->getCode();
-    //         WriteLogAudit($errorCode);
-    //     }
-    // }
+            WriteLogAudit($apiResponse[1]);
+            return $apiResponse;
+        } catch (Cybersource\ApiException $e) {
+            print_r($e->getResponseBody());
+            print_r($e->getMessage());
+            $errorCode = $e->getCode();
+            WriteLogAudit($errorCode);
+        }
+    }
 
     public function getReservationData($reservationId)
     {

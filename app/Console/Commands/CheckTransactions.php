@@ -15,10 +15,10 @@ class CheckTransactions extends Command
     public function handle()
     {
         Log::info("check:transactions is running");
-        $tenMinutesAgo = Carbon::now()->subMinutes(10);
+        $tenMinutesAgo = Carbon::now()->subMinutes(3600);
         $fiveMinutesAgo = Carbon::now()->subMinutes(1);
 
-        $transactions = Reservation::whereBetween('created_at', [$tenMinutesAgo, $fiveMinutesAgo])->where('status', 2)->where('captured', 0)->get();
+        $transactions = Reservation::whereBetween('creation_time', [$tenMinutesAgo, $fiveMinutesAgo])->where('status', 2)->where('captured', 0)->get();
 
         foreach ($transactions as $transaction) {
             Log::info(json_encode(json_encode($transaction)));

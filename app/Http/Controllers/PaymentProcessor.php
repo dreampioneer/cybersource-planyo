@@ -97,6 +97,7 @@ class PaymentProcessor
         try {
             $apiResponse = $api_instance->createPayment($requestObj);
             $paymentStatus = $this->getPaymentStatus($apiResponse[0]->getStatus());
+            Log::info($apiResponse[0]->getStatus());
             Log::info($paymentStatus);
             $result = $this->addReservationPayment([
                 'reservation_ids'=> $data['reservationIds'],
@@ -205,12 +206,15 @@ class PaymentProcessor
     {
         switch ($status) {
             case 'AUTHORIZED':
-                return 1;
+            case 'PARTIAL_AUTHORIZED':
+            case 'AUTHORIZED_PENDING_REVIEW':
+            case 'PENDING_AUTHENTICATION':
+            case 'PENDING_REVIEW':
+                return 2;
+            case 'AUTHORIZED_RISK_DECLINED':
             case 'DECLINED':
             case 'INVALID_REQUEST':
                 return 3;
-            default:
-                return 2;
         }
     }
 }

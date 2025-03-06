@@ -13,6 +13,10 @@ use CyberSource\Model\Ptsv2paymentsOrderInformationBillTo;
 use CyberSource\Model\CreatePaymentRequest;
 use CyberSource\Model\Ptsv2paymentsClientReferenceInformation;
 use CyberSource\Model\Ptsv2paymentsProcessingInformation;
+use CyberSource\Model\Ptsv2paymentsidcapturesOrderInformationAmountDetails;
+use CyberSource\Model\Ptsv2paymentsidcapturesOrderInformation;
+use CyberSource\Api\CaptureApi;
+use CyberSource\Model\CapturePaymentRequest;
 use CyberSource\ApiClient;
 use CyberSource\ExternalConfiguration;
 use CyberSource\Api\PaymentsApi;
@@ -130,32 +134,32 @@ class PaymentProcessor
         $clientReferenceInformationArr = [
             "code" => "TC50171_3"
         ];
-        $clientReferenceInformation = new CyberSource\Model\Ptsv2paymentsClientReferenceInformation($clientReferenceInformationArr);
+        $clientReferenceInformation = new Ptsv2paymentsClientReferenceInformation($clientReferenceInformationArr);
 
         $orderInformationAmountDetailsArr = [
                 "totalAmount" => "102.21",
                 "currency" => "USD"
         ];
-        $orderInformationAmountDetails = new CyberSource\Model\Ptsv2paymentsidcapturesOrderInformationAmountDetails($orderInformationAmountDetailsArr);
+        $orderInformationAmountDetails = new Ptsv2paymentsidcapturesOrderInformationAmountDetails($orderInformationAmountDetailsArr);
 
         $orderInformationArr = [
             "amountDetails" => $orderInformationAmountDetails
         ];
-        $orderInformation = new CyberSource\Model\Ptsv2paymentsidcapturesOrderInformation($orderInformationArr);
+        $orderInformation = new Ptsv2paymentsidcapturesOrderInformation($orderInformationArr);
 
         $requestObjArr = [
                 "clientReferenceInformation" => $clientReferenceInformation,
                 "orderInformation" => $orderInformation
         ];
-        $requestObj = new CyberSource\Model\CapturePaymentRequest($requestObjArr);
+        $requestObj = new CapturePaymentRequest($requestObjArr);
 
 
-        $commonElement = new CyberSource\ExternalConfiguration();
+        $commonElement = new ExternalConfiguration();
         $config = $commonElement->ConnectionHost();
         $merchantConfig = $commonElement->merchantConfigObject();
 
-        $api_client = new CyberSource\ApiClient($config, $merchantConfig);
-        $api_instance = new CyberSource\Api\CaptureApi($api_client);
+        $api_client = new ApiClient($config, $merchantConfig);
+        $api_instance = new CaptureApi($api_client);
 
         try {
             $apiResponse = $api_instance->capturePayment($requestObj, $id);
@@ -165,10 +169,10 @@ class PaymentProcessor
             WriteLogAudit($apiResponse[1]);
             return $apiResponse;
         } catch (Cybersource\ApiException $e) {
-            print_r($e->getResponseBody());
-            print_r($e->getMessage());
-            $errorCode = $e->getCode();
-            WriteLogAudit($errorCode);
+            return [
+                'statusCode' => $e->getCode(),
+                'message' => $e->getMessage()
+            ];
         }
     }
 

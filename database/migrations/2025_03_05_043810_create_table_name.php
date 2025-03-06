@@ -18,7 +18,8 @@ return new class extends Migration
             $table->integer('payment_confirming_reservation');
             $table->integer('captured')->default(0);
             $table->dateTime('creation_time')->nullable();
-            $table->integer('transaction_id')->nullable();
+            $table->string('cart_id')->nullable();
+            $table->string('transaction_id')->nullable();
             $table->timestamps();
         });
     }

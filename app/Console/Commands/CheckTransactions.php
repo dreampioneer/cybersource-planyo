@@ -14,14 +14,14 @@ class CheckTransactions extends Command
 
     public function handle()
     {
-      Log::info("check:transactions is running");
+        Log::info("check:transactions is running");
         $tenMinutesAgo = Carbon::now()->subMinutes(10);
         $fiveMinutesAgo = Carbon::now()->subMinutes(1);
 
-        $transactions = Reservation::whereBetween('created_at', [$tenMinutesAgo, $fiveMinutesAgo])->get();
+        $transactions = Reservation::whereBetween('created_at', [$tenMinutesAgo, $fiveMinutesAgo])->where('status', 2)->where('captured', 0)->get();
 
         foreach ($transactions as $transaction) {
-          Log::info(json_encode(json_encode($transaction)));
+            Log::info(json_encode(json_encode($transaction)));
             // Process each transaction here
             $this->info("Processing transaction ID: " . $transaction->id);
         }

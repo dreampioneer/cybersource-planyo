@@ -18,7 +18,7 @@ class PlanyoController extends BaseController {
       'payment_confirming_reservation' => intval($request->payment_confirming_reservation),
       'created_at' => Carbon::createFromTimestamp($request->creation_date)
     ];
-
+    Log::info("Planyo Webhook" . json_encode($data));
     $validator = Validator::make($data, [
       'reservation_id' => 'required|integer',
       'status' => 'required|integer',

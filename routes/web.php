@@ -22,5 +22,7 @@ $router->get('/checkout', ['as' => 'checkout', 'uses' => 'CheckOutController@che
 $router->post('/checkout', 'CheckOutController@checkOutP');
 $router->post('/checkout/checkout_process', 'CheckOutController@checkOutProcess');
 $router->post('/planyo/webhook','PlanyoController@webHook');
+$router->get('/cybersource/webhook','CybersourceController@webHook');
 $router->post('/cybersource/webhook','CybersourceController@webHook');
+$router->get('/cybersource/webhook_health_check','CybersourceController@webHookHealthCheck');
 $router->post('/cybersource/webhook_health_check','CybersourceController@webHookHealthCheck');

@@ -7,6 +7,7 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 use App\Http\Controllers\PaymentProcessor;
 use App\Models\Reservation;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 class CheckOutController extends BaseController
 {
   public function checkOut(Request $request) {
@@ -28,6 +29,7 @@ class CheckOutController extends BaseController
             'payment_confirming_reservation' => isset($item['payment_confirming_reservation']) ? intval($item['payment_confirming_reservation']) : 0,
             'created_at' => Carbon::createFromTimestamp($item['creation_time']),
         ];
+        Log::info($item['creation_time'] . "          " . Carbon::createFromTimestamp($item['creation_time']));
         if(!$exist) {
           $reservation = Reservation::create($dData);
         } else {

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use App\Http\Controllers\PaymentProcessor;
-
+use App\Models\Reservation;
 class CheckOutController extends BaseController
 {
   public function checkOut(Request $request) {
@@ -59,6 +59,18 @@ class CheckOutController extends BaseController
         array_push($amounts, $reservation['data']['total_price'] ?? 0);
         if ($index === 0) {
             $firstReservation = $reservation['data'] ?? [];
+        }
+        $exist = Reservation::where('reservation_id', $item['reservation_id'])->count();
+        $data = [
+            'reservation_id' => intval($item['reservation_id']),
+            'status' => intval($item['status']),
+            'payment_confirming_reservation' => intval($item['payment_confirming_reservation']),
+            'created_at' => $item['creation_time'],
+        ];
+        if(!$exist) {
+          $reservation = Reservation::create($data);
+        } else {
+          $reservation = Reservation::where('reservation_id', $item['reservation_id'])->update($data);
         }
       }
       $payment = $paymentProcessor->makePayment([

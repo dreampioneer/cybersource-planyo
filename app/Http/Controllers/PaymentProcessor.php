@@ -100,7 +100,7 @@ class PaymentProcessor
             $paymentStatus = $this->getPaymentStatus($apiResponse[0]->getStatus());
             Log::info($apiResponse[0]->getStatus());
             Log::info($paymentStatus);
-            Reservation::whereIn('reservation_id', $data['reservationIds'])->update(['payment_confirming_reservation' => $paymentStatus]);
+            Reservation::whereIn('reservation_id', $data['reservationIds'])->update(['payment_confirming_reservation' => $paymentStatus, 'captured' => $capture ? 1 : 0]);
             $result = $this->addReservationPayment([
                 'reservation_ids'=> $data['reservationIds'],
                 'payment_mode' => 40,

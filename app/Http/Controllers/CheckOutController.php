@@ -97,6 +97,6 @@ class CheckOutController extends BaseController
         "statusCode" => 400,
         "message" => 'Something went wrong!'
       ];
-    }  
+    }
   }
 }

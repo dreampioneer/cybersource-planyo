@@ -132,13 +132,13 @@ class PaymentProcessor
     public function capturePayment($data){
 
         $clientReferenceInformationArr = [
-            "code" => "TC50171_3"
+            "code" => $data["code"],
         ];
         $clientReferenceInformation = new Ptsv2paymentsClientReferenceInformation($clientReferenceInformationArr);
 
         $orderInformationAmountDetailsArr = [
-                "totalAmount" => "102.21",
-                "currency" => "USD"
+                "totalAmount" => $data["amount"],
+                "currency" => "SGD"
         ];
         $orderInformationAmountDetails = new Ptsv2paymentsidcapturesOrderInformationAmountDetails($orderInformationAmountDetailsArr);
 
@@ -162,15 +162,16 @@ class PaymentProcessor
         $api_instance = new CaptureApi($api_client);
 
         try {
-            $apiResponse = $api_instance->capturePayment($requestObj, $id);
-            print_r(PHP_EOL);
-            print_r($apiResponse);
-
-            WriteLogAudit($apiResponse[1]);
-            return $apiResponse;
+            $apiResponse = $api_instance->capturePayment($requestObj, $data["id"]);
+            $result = [
+                'status' => 'success',
+                'paymentStatus' => $apiResponse[0]->getStatus() == 'PENDING' ? 2 : 3,
+                'transaction_id' => $apiResponse[0]->getId(),
+            ];
+            return $result;
         } catch (Cybersource\ApiException $e) {
             return [
-                'statusCode' => $e->getCode(),
+                'status' => 'failed',
                 'message' => $e->getMessage()
             ];
         }

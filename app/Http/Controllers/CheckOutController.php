@@ -24,7 +24,7 @@ class CheckOutController extends BaseController
         $dData = [
             'reservation_id' => intval($item['reservation_id']),
             'status' => intval($item['status']),
-            'payment_confirming_reservation' => intval($item['payment_confirming_reservation']),
+            'payment_confirming_reservation' => isset($item['payment_confirming_reservation']) ? intval($item['payment_confirming_reservation']) : 0,
             'created_at' => $item['creation_time'],
         ];
         if(!$exist) {

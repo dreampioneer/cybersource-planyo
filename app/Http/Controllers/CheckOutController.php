@@ -30,12 +30,7 @@ class CheckOutController extends BaseController
             'creation_time' => $item['creation_time'],
         ];
         if(!$exist) {
-          $reservation = new Reservation();
-          $reservation->reservation_id = $dData['reservation_id'];
-          $reservation->status = $dData['status'];
-          $reservation->payment_confirming_reservation = $dData['payment_confirming_reservation'];
-          $reservation->created_at = $dData['created_at'];
-          $reservation->save();
+          $reservation = Reservation::create($dData);
         } else {
           $reservation = Reservation::where('reservation_id', $item['reservation_id'])->update($dData);
         }
